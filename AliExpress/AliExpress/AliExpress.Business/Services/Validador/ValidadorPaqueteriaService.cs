@@ -1,0 +1,40 @@
+﻿
+using AliExpress.AliExpress.Data.Entites.DTO;
+using AliExpress.AliExpress.Data.Entites.Enumerables;
+using AliExpress.Interfaces.Business;
+using System;
+
+namespace AliExpress.AliExpress.Business.Services.Validador
+{
+    public class ValidadorPaqueteriaService : IValidadorDatosPedidoService
+    {
+        private IValidadorDatosPedidoService validadorDatosPedidoService;
+
+        public void AsignarSiguienteValidacion(IValidadorDatosPedidoService _validadorDatosPedidoService)
+        {
+            validadorDatosPedidoService = _validadorDatosPedidoService ?? throw new ArgumentNullException(nameof(_validadorDatosPedidoService));
+        }
+
+        public DatosPaqueteDTO ValidarDatosPedido(DatosPaqueteDTO _datosPaqueteDTO)
+        {
+            switch (_datosPaqueteDTO.cPaqueteria.ToUpper())
+            {
+                case "FEDEX":
+                case "ESTAFETA":
+                case "DHL":
+                    break;
+                default:
+                    _datosPaqueteDTO.lError = true;
+                    _datosPaqueteDTO.iError = (int)EnumErrores.ErrorPaqueteria;
+                    _datosPaqueteDTO.iColorMensaje = (int)ConsoleColor.Red;
+                    break;
+            }
+
+            if (validadorDatosPedidoService != null && !_datosPaqueteDTO.lError)
+            {
+                validadorDatosPedidoService.ValidarDatosPedido(_datosPaqueteDTO);
+            }
+            return _datosPaqueteDTO;
+        }
+    }
+}
