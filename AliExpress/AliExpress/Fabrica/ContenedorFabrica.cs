@@ -26,6 +26,10 @@ namespace AliExpress.Fabrica
             For<IAsignadorPedidoViewModelService>().Use<AsignadorPedidoViewModelService>();
             For<IValidadorDatosPaquetesViewModelService>().Use<ValidadorDatosPaquetesViewModelService>();
             For<ICalculadorTiemposViewModelService>().Use<CalculadorTiemposViewModelService>();
+            For<IConvertidorFormatoViewModel>().Use<ConvertidorFormatoViewModel>();
+            For<IManipuladorDatosArchivosViewModel>().Use<ManipuladorDatosArchivosViewModel>();
+            For<IEliminadorDatosArchivoViewModelService>().Use<EliminadorDatosArchivoViewModelService>();
+            For<ICreadorDatosArchivoViewModelService>().Use<CreadorDatosArchivoViewModelService>();
         }
     }
 }

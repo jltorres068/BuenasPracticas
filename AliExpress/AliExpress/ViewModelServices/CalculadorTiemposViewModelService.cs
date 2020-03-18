@@ -29,15 +29,29 @@ namespace AliExpress.ViewModelServices
                 //Horas hasta 23 horas
                 cTiempoEntrega = $"{dTiempoExacto.ToString()} horas";
             }
+            else if(dTiempoHoras <= 144)
+            {
+                //Horas hasta 6 días
+                cTiempoEntrega = $"{dTiempoExacto.ToString()} día(s)";
+            }
             else if (dTiempoHoras < 720)
             {
-                //Días hasta 30 días
-                cTiempoEntrega = $"{dTiempoExacto.ToString()} días";
+                //Semanas hasta 29 días
+                cTiempoEntrega = $"{dTiempoExacto.ToString()} semana(s)";
             }
-            else
+            else if(dTiempoHoras == 720)
             {
-                //Meses sin límite
-                cTiempoEntrega = $"{dTiempoExacto.ToString()} meses";
+                //Horas hasta 6 días
+                cTiempoEntrega = $"{dTiempoExacto.ToString()} mes";
+            }
+            else if(dTiempoHoras <= 8640)
+            {
+                //Horas hasta 6 días
+                cTiempoEntrega = $"{dTiempoExacto.ToString()} bimestre(s)";
+            }else if(dTiempoHoras > 8640)
+            {
+                //Horas hasta 6 semestres
+                cTiempoEntrega = $"{dTiempoExacto.ToString()} años";
             }
 
             return cTiempoEntrega;
@@ -46,21 +60,34 @@ namespace AliExpress.ViewModelServices
         private Double CalcularTiempoExacto(Double _dTiempo)
         {
             Double dTiempoExacto = 0;
-            if (_dTiempo < 1)
+            if (_dTiempo < 1)//Minutos
             {
                 dTiempoExacto = 60 * _dTiempo;
             }
-            else if (_dTiempo <= 24)
+            else if (_dTiempo < 24)//Horas
             {
                 dTiempoExacto = _dTiempo;
             }
-            else if (_dTiempo <= 720)
+            else if (_dTiempo <= 144)//Dias
             {
                 dTiempoExacto = _dTiempo / 24;
             }
-            else
+            else if(_dTiempo < 720)//Semanas
             {
-                dTiempoExacto = _dTiempo / 720;
+                dTiempoExacto = _dTiempo / 144;
+                dTiempoExacto = _dTiempo > 4 ? 4 : _dTiempo;
+            }
+            else if(_dTiempo == 720)//Mes
+            {
+                dTiempoExacto = _dTiempo;
+            }
+            else if(_dTiempo <= 8640)//bimestres
+            {
+                dTiempoExacto = _dTiempo / 1440;
+            }
+            else if(_dTiempo > 8640)//años
+            {
+                dTiempoExacto = _dTiempo / 8640;
             }
             dTiempoExacto = Math.Round(dTiempoExacto);
 

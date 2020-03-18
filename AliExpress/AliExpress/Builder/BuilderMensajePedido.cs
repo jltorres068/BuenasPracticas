@@ -24,7 +24,14 @@ namespace AliExpress.Builder
 
         public void AsignarOrigen(string _cCiudadOrigen, string _cPaisOrigen)
         {
-            cMensaje += $" de {_cCiudadOrigen}, {_cPaisOrigen}";
+            if (string.IsNullOrWhiteSpace(_cPaisOrigen))
+            {
+                cMensaje += $" de {_cCiudadOrigen}";
+            }
+            else
+            {
+                cMensaje += $" de {_cCiudadOrigen}, {_cPaisOrigen}";
+            }
         }
 
         public void AsignarExpresion2(DateTime _dtFechaEntrega)
@@ -41,7 +48,14 @@ namespace AliExpress.Builder
 
         public void AsignarDestino(string _ccCiudadDestino, string _cPaisDestino)
         {
-            cMensaje += $" a {_ccCiudadDestino}, {_cPaisDestino}";
+            if (string.IsNullOrWhiteSpace(_cPaisDestino))
+            {
+                cMensaje += $" a {_ccCiudadDestino}";
+            }
+            else
+            {
+                cMensaje += $" a {_ccCiudadDestino}, {_cPaisDestino}";
+            }
         }
 
         public void AsignarExpresion3(DateTime _dtFechaEntrega)

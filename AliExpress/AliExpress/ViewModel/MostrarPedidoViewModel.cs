@@ -4,6 +4,7 @@ using AliExpress.Builder;
 using AliExpress.Interfaces.UI;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace AliExpress.ViewModel
@@ -43,6 +44,7 @@ namespace AliExpress.ViewModel
                     cMensajePedido = builderMensaje.ObtenerMensaje();
 
                     MostrarMensaje(cMensajePedido, datosPaqueteDTO.iColorMensaje);//Original
+                    MostrarInformacionArchivo(cMensajePedido, datosPaqueteDTO.iColorMensaje, datosPaqueteDTO.cPaqueteria);
 
                     List<DatosPaqueteDTO> lstDatosPaquetesEconomicos = new List<DatosPaqueteDTO>();
                     List<DatosPaqueteDTO> lstDatosPedidosEconomicosFiltrados = new List<DatosPaqueteDTO>();
@@ -83,10 +85,67 @@ namespace AliExpress.ViewModel
             }
 
         }
-        public void MostrarMensaje(string _cMensaje, int _iColorMensaje)
+        private void MostrarMensaje(string _cMensaje, int _iColorMensaje)
         {
             Console.ForegroundColor = (ConsoleColor)_iColorMensaje;
             Console.WriteLine(_cMensaje);
+        }
+
+        private void MostrarInformacionArchivo(string _cMensaje, int _iColorMensaje, string cPaqueteria)
+        {
+
+            string rutaCompleta = Path.GetFullPath(cPaqueteria);
+            string cArchivo = string.Empty;
+            rutaCompleta = rutaCompleta.Replace("\\AliExpress\\bin\\Debug\\netcoreapp2.1", "");
+            switch (_iColorMensaje)
+            {
+                case (int)ConsoleColor.Green:
+                    rutaCompleta += "\\Entregados";
+                    break;
+
+                case (int)ConsoleColor.Yellow:
+                    rutaCompleta += "\\Pendientes";
+                    break;
+            }
+
+            if (_cMensaje.Contains("minutos"))
+            {
+                cArchivo = "\\Minutos.txt";
+            }
+            else if (_cMensaje.Contains("horas"))
+            {
+                cArchivo = "\\Horas.txt";
+            }
+            else if(_cMensaje.Contains("día(s)"))
+            {
+                cArchivo = "\\Dias.txt";
+            }
+            else if (_cMensaje.Contains("mes") && !_cMensaje.Contains("bimestre(s)"))
+            {
+                cArchivo = "\\Meses.txt";
+            }
+            else if (_cMensaje.Contains("bimestre(s)"))
+            {
+                cArchivo = "\\Bimestre.txt";
+            }
+            else if (_cMensaje.Contains("años"))
+            {
+                cArchivo = "\\Años.txt";
+            }            
+            rutaCompleta += cArchivo;
+
+            List<string> lineas = File.ReadAllLines(rutaCompleta).ToList();
+
+            if (lineas.Count >0)
+            {
+                lineas.Add(_cMensaje);
+                File.WriteAllLines(rutaCompleta, lineas);
+            }
+            else
+            {
+                File.AppendAllText(rutaCompleta, _cMensaje);
+            }
+
         }
     }
 }

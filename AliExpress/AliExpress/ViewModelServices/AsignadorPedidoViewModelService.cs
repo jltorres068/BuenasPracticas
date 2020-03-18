@@ -23,12 +23,12 @@ namespace AliExpress.ViewModelServices
 
         public DatosPaqueteDTO AsignarDatosExtraPaquetes(DatosPaqueteDTO _datosPaqueteDTO)
         {
-            var service = estrategiaCalculadorPaqueteriaService.CrearInstancia(_datosPaqueteDTO.iPaqueteria);
+            var serviceEstrategia = estrategiaCalculadorPaqueteriaService.CrearInstancia(_datosPaqueteDTO.iPaqueteria);
 
-            _datosPaqueteDTO.iEstacion = AsignarEstacion(_datosPaqueteDTO.dtFechaPedido);//Cualquiera
-            _datosPaqueteDTO.lstTransporte = AsignarTransportes(_datosPaqueteDTO.iPaqueteria);//Paqueteria
-            _datosPaqueteDTO.dUtilidad = service.CalcularMargenUtilidad(_datosPaqueteDTO.dtFechaPedido);//Paqueteria (Service)            
-            _datosPaqueteDTO.dTiempoReparto = service.CalculadorTiempoReparto(_datosPaqueteDTO.iTransporte);//Paqueteria (Service)
+            _datosPaqueteDTO.iEstacion = AsignarEstacion(_datosPaqueteDTO.dtFechaPedido);
+            _datosPaqueteDTO.lstTransporte = AsignarTransportes(_datosPaqueteDTO.iPaqueteria);
+            _datosPaqueteDTO.dUtilidad = serviceEstrategia.CalcularMargenUtilidad(_datosPaqueteDTO.dtFechaPedido);
+            _datosPaqueteDTO.dTiempoReparto = serviceEstrategia.CalculadorTiempoReparto(_datosPaqueteDTO.iTransporte);
             _datosPaqueteDTO.dVelocidad = AsignarVelocidad(_datosPaqueteDTO.iTransporte);
 
             return _datosPaqueteDTO;
@@ -51,6 +51,19 @@ namespace AliExpress.ViewModelServices
                     paqueteDTO.cCiudadOrigen = listaPaquetes[5];
                     paqueteDTO.cPaisDestino = listaPaquetes[6];
                     paqueteDTO.cCiudadDestino = listaPaquetes[7];
+                    paqueteDTO.iPaqueteria = AsignarPaqueteria(listaPaquetes[1].ToString());
+                    paqueteDTO.iTransporte = AsignarTransporte(listaPaquetes[2].ToString());
+                    lstDatosPaquetes.Add(paqueteDTO);
+                }
+                else if(listaPaquetes.Count == 6)
+                {
+                    DatosPaqueteDTO paqueteDTO = new DatosPaqueteDTO();
+                    paqueteDTO.dDistancia = Convert.ToDouble(listaPaquetes[0]);
+                    paqueteDTO.cPaqueteria = listaPaquetes[1];
+                    paqueteDTO.cMedioTransporte = listaPaquetes[2];
+                    paqueteDTO.dtFechaPedido = Convert.ToDateTime(listaPaquetes[3]);
+                    paqueteDTO.cCiudadOrigen = listaPaquetes[4];
+                    paqueteDTO.cCiudadDestino = listaPaquetes[5];
                     paqueteDTO.iPaqueteria = AsignarPaqueteria(listaPaquetes[1].ToString());
                     paqueteDTO.iTransporte = AsignarTransporte(listaPaquetes[2].ToString());
                     lstDatosPaquetes.Add(paqueteDTO);
